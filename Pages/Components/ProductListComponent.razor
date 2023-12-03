@@ -1,0 +1,46 @@
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in _products)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>@product.Name</td>
+                <td>@product.Description</td>
+                <td><img src="@product.Image" height="40px" /></td>
+                <td>@product.Price</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private List<Models.Product> _products = new();
+
+    override protected async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+        for (int i = 1; i <= 4; i++)
+        {
+            _products.Add(new Product
+                {
+                    Id = i,
+                    Name = $"Product {i}",
+                    Description = $"This is the description for product {i}",
+                    Image = $"https://picsum.photos/seed/{i}/200/300",
+                    Price = i * 50
+                });
+        }
+
+    }
+}

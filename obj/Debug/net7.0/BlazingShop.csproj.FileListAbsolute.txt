@@ -29,3 +29,4 @@ D:\Workspaces\BLAZOR\BlazingShop\obj\Debug\net7.0\refint\BlazingShop.dll
 D:\Workspaces\BLAZOR\BlazingShop\obj\Debug\net7.0\BlazingShop.pdb
 D:\Workspaces\BLAZOR\BlazingShop\obj\Debug\net7.0\BlazingShop.genruntimeconfig.cache
 D:\Workspaces\BLAZOR\BlazingShop\obj\Debug\net7.0\ref\BlazingShop.dll
+D:\Workspaces\BLAZOR\BlazingShop\obj\Debug\net7.0\BlazingShop.sourcelink.json
