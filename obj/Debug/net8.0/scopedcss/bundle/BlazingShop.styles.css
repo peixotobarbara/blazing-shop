@@ -12,8 +12,7 @@ main[b-qb8r1fj9y6] {
 }
 
 .sidebar[b-qb8r1fj9y6] {
-    background: rgb(2,0,36);
-    background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(116,226,248,1) 100%);
+    background: rgb(4, 4, 58);
 }
 
 .top-row[b-qb8r1fj9y6] {
@@ -116,7 +115,7 @@ main[b-qb8r1fj9y6] {
     }
 
 .nav-item[b-y1olo2g61n]  a.active {
-    background-color: rgba(255,255,255,0.25);
+    background-color: rgba(72, 196, 249, 0.6);
     color: white;
 }
 

@@ -1,0 +1,104 @@
+@page "/products/edit/{id:int}"
+@inject AppDbContext _context
+@inject NavigationManager NavigationManager
+
+<h1>@_model?.Name</h1>
+
+<div class="card ">
+    <div class="card-header">
+        Edit Product
+    </div>
+    <div class="card-body">
+        <EditForm Model="_model" OnValidSubmit="HandleSubmitAsync">
+
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="row">
+                <div class="col-4">
+                    <label for="Name">Name</label>
+                    <InputText id="Name" class="form-control" @bind-Value="_model.Name" />
+                </div>
+                <div class="col-2">
+                    <label for="Price">Price</label>
+                    <InputNumber id="Price" class="form-control" @bind-Value="_model.Price" />
+                </div>
+                <div class="col-3">
+                    <label for="CategoryId">Category</label>
+                    <InputSelect id="CategoryId" class="form-control" @bind-Value="_model.CategoryId">
+                        @foreach (var category in _categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary my-auto">
+                    <i class="oi oi-circle-check"></i>&nbsp;&nbsp;Save
+                </button>
+            </div>
+        </EditForm>
+    </div>
+
+    @if(_errorMessage is not null){
+        <div class="card-footer">
+            <div class="alert alert-danger" role="alert">
+                @_errorMessage
+            </div>
+        </div>
+    }
+
+    @if(_successMessage is not null){
+        <div class="card-footer">
+            <div class="alert alert-success" role="alert">
+                @_successMessage
+            </div>
+        </div>
+    }
+
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Product? _model = new();
+    List<Category> _categories = new();
+    string? _errorMessage = null;
+    string? _successMessage = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _categories = await _context.Categories.AsNoTracking().OrderBy(c => c.Name).ToListAsync();
+        _model = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == Id) ?? new();
+    }
+
+    async Task HandleSubmitAsync()
+    {
+        try
+        {
+            var prod = _context.Products.FirstOrDefault(p => p.Id == Id);
+            if(prod is null)
+            {
+                _errorMessage = "Produto não encontrado!";
+                return;
+            }
+
+
+            prod.Name = _model?.Name ?? "";
+            prod.Price = _model?.Price ?? 0;
+            prod.CategoryId = _model?.CategoryId ?? 0;
+
+            _context.Products.Update(prod);
+            await _context.SaveChangesAsync();
+
+            _successMessage = "Produto editado com sucesso!";
+
+            Task.Delay(2000).ContinueWith(t => NavigationManager.NavigateTo("/products"));
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = "Ocorreu um erro ao editar o produto: \n" + ex.Message;
+        }
+    }
+}

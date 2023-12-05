@@ -1,36 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlazingShop.Models
 {
     public class Product
     {
-        public Product()
-        {
-            
-        }
-
-        public Product(int id, string name, string description, string image, decimal price, int categoryId, Category category)
-        {
-            Id = id;
-            Name = name;
-            Description = description;
-            Image = image;
-            Price = price;
-            CategoryId = categoryId;
-            Category = category;
-        }
-
+        [Key]
+        [Required(ErrorMessage = "Id é obrigatório")]
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
 
-        public string Image { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Nome é obrigatório")]
+        [MaxLength(150, ErrorMessage = "Nome não pode ter mais de 150 caracteres")]
+        [MinLength(5, ErrorMessage = "Nome deve ter pelo menos 5 caracteres")]
+        public string Name { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Descrição é obrigatório")]
+        [DataType(DataType.Currency)]
+        [Range(0, 9999, ErrorMessage = "Preço deve estar entre 0 e 9999")]
         public decimal Price { get; set; }
 
+        [Required(ErrorMessage = "Categoria é obrigatória")]
+        [Range(1, 9999, ErrorMessage = "Categoria deve estar entre 1 e 9999")]
         public int CategoryId { get; set; }
-        public Category Category { get; set; } = new();
+        
+        public Category Category { get; set; } = null!;
     }
 }

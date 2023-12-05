@@ -1,0 +1,28 @@
+@page "/products/"
+@using BlazingShop.Pages.Components
+@inject NavigationManager NavigationManager
+
+<PageTitle>Blazing Shop - Products</PageTitle>
+
+<h1>Products</h1>
+
+<div class="card">
+    <div class="card-header text-end">
+        <button class="btn btn-outline-primary" @onclick="Create">
+            <i class="oi oi-plus"></i>&nbsp;&nbsp;Create
+        </button>
+    </div>
+
+    <div class="card-body">
+        <ProductListComponent>
+        </ProductListComponent>
+    </div>
+</div>
+
+@code {
+
+    public void Create()
+    {
+        NavigationManager.NavigateTo("/products/create");
+    }
+}

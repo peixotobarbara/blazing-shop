@@ -1,12 +1,14 @@
+@inject AppDbContext _context
+@inject NavigationManager NavigationManager
 
 <table class="table">
     <thead>
         <tr>
             <th>Id</th>
             <th>Name</th>
-            <th>Description</th>
-            <th>Image</th>
             <th>Price</th>
+            <th>Category</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -15,9 +17,16 @@
             <tr>
                 <td>@product.Id</td>
                 <td>@product.Name</td>
-                <td>@product.Description</td>
-                <td><img src="@product.Image" height="40px" /></td>
-                <td>@product.Price</td>
+                <td>@product.Price.ToString("C")</td>
+                <td>@product.Category</td>
+                <td>
+                    <button class="btn btn-outline-info" @onclick="@(() => Edit(@product.Id))">
+                        <i class="oi oi-pencil"></i>
+                    </button>
+                    <button class="btn btn-outline-danger" @onclick="@(() => Delete(@product.Id))">
+                        <i class="oi oi-circle-x"></i>
+                    </button>
+                </td>
             </tr>
         }
     </tbody>
@@ -29,18 +38,28 @@
 
     override protected async Task OnInitializedAsync()
     {
-        await Task.Delay(500);
-        for (int i = 1; i <= 4; i++)
-        {
-            _products.Add(new Product
-                {
-                    Id = i,
-                    Name = $"Product {i}",
-                    Description = $"This is the description for product {i}",
-                    Image = $"https://picsum.photos/seed/{i}/200/300",
-                    Price = i * 50
-                });
-        }
+        await GetProducts();
+    }
 
+    private async Task GetProducts()
+    {
+        _products = await _context.Products.AsNoTracking().ToListAsync();
+    }
+
+    public void Edit(int id)
+    {
+        NavigationManager.NavigateTo($"/products/edit/{id}");
+    }
+
+    public async Task Delete(int id)
+    {
+        var prod = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+        if (prod is null)
+            throw new Exception("Produto não encontrado");
+
+        _context.Products.Remove(prod);
+        await _context.SaveChangesAsync();
+
+        await GetProducts();
     }
 }
